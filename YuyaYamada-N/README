@@ -1,0 +1,4 @@
+existent
+  Solver first transforms the input, then calls clingo twice:
+  * first solve has a time limit of 1800 and counts the number of models
+  * the second solve has a time limit of 7200 and uses up to one core per model
