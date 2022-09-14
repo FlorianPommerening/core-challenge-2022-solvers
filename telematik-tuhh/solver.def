@@ -1,0 +1,5 @@
+Bootstrap: docker-daemon
+From: telematik-tuhh-solver:latest
+
+%runscript
+    /2022solver/run.sh $@

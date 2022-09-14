@@ -1,0 +1,9 @@
+Bootstrap: docker-daemon
+From: yuya-yamada-n-longest-solver:latest
+
+%post
+    chmod +x /2022solver/run.sh
+    sed -i "s|TMP_DIR_PATH=\"\${DIRNAME}tmp/\"|TMP_DIR_PATH=\"/tmp/yuya-yamada-n-longest-solver/\"|g" /2022solver/run.sh
+
+%runscript
+    /2022solver/run.sh $@
