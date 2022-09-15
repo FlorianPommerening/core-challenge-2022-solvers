@@ -1,0 +1,3 @@
+- I think there is a fixed 10 minute timeout and the solver seems to run on a
+  single core.
+- No information in the planner abstract.
