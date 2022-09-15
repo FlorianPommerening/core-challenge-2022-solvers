@@ -1,0 +1,22 @@
+Quote from the planner abstract:
+
+```
+We generated the log ﬁles in parallel on 32 nodes of our cluster. Each
+node has access to two 8-core Intel Xeon E5-2620 v4 CPUs running at 2.10
+GHz (turbo-mode disabled) and 128 GB main memory.
+
+Since ABC spawns multiple processes we only allocated one instance
+per node. For CaMiCaL we ran 4 instances in parallel on each node. The
+memory was limited to 32 GB for each of the instances. The timeout was set
+to 10000 seconds for both. For the longest-track we used the same number
+of instances and memory limit and a timeout of 5000 seconds.
+```
+
+- The existent track uses ABC
+    - 16 cores, 128 GB, and 10000 seconds timeout per instance
+- The shortest track uses CaMiCaL
+    - 4 cores, 32 GB, and 10000 seconds timeout per instance
+- The longest track uses CaDiCaL directly, without CaMiCaL
+    - 4 cores, 32 GB, and 5000 seconds timeout per instance
+
+I couldn't see/verify these numbers in the code.

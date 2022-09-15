@@ -1,0 +1,9 @@
+Bootstrap: docker-daemon
+From: froleyks-solver:latest
+
+%post
+    printf '#!/bin/bash\n' > /2022solver/run.sh
+    printf '/2022solver/reconfaigeration $1 $2 existent\n' >> /2022solver/run.sh
+
+%runscript
+    /2022solver/run.sh $@
