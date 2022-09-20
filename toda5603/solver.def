@@ -1,11 +1,14 @@
 Bootstrap: docker-daemon
 From: toda5603-solver:latest
 
+%files
+    ECC8.jar /2022solver/bin/
+    NuSMV /2022solver/bin/
+
 %post
     sed -i "3 i trap \"rm -rf \${TMP_DIR}\" EXIT" /2022solver/bin/greedy_bmc-solver_ecc.sh
     sed -i "4 i TMP_DIR=/tmp/toda5603/\$\$/" /2022solver/bin/greedy_bmc-solver_ecc.sh
     sed -i "5 i mkdir -p \${TMP_DIR}" /2022solver/bin/greedy_bmc-solver_ecc.sh
-    sed -i "6 i echo \${TMP_DIR}" /2022solver/bin/greedy_bmc-solver_ecc.sh
     sed -i "s|\${SCRIPT_DIR}/../tmp/|\${TMP_DIR}|g" /2022solver/bin/greedy_bmc-solver_ecc.sh
 
 %runscript

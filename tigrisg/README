@@ -1,0 +1,11 @@
+The solver employs one of two algorithms, depending on the scale of the problem:
+ - small scale -> brute force algorithm ("solver.exe")
+ - larger scale -> sarsa solver (reinforcment learning?)
+
+It seems to use no limits in the run script.
+
+Problems:
+ - could not get it to run since it has arm architecture. It is also unclear 
+ how the container is supposed to work; it has run.sh but otherwise *.exe files.
+ - Florian discovered that the test deciding the solver is most likely broken
+ since it doesn't actually execute the command.

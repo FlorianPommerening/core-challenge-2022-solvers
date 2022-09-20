@@ -1,0 +1,20 @@
+Solver needs two external sources:
+ - https://github.com/Pronte/ECC (edge clique cover computation)
+ - https://nusmv.fbk.eu/ (bounded model checking)
+
+The solver first transforms the .col file in several steps:
+ - col2nde: ??
+   -> takes .col as input, results in *.nde
+ - ECC8.jar: computes edge clique cover
+   -> takes *.nde as input, results in *.ecc
+ - ecc2mat: ??
+   -> takes *.nde-rand.EPSc.cover file as input (??), results in *.mat
+
+It then runs two components sequentially:
+ - a greedy search on the *original* input files
+   - has a parameter "10000", so maybe a timeout of 10000 seconds?
+   - creates a new .dat file on failure
+ - a bounded model checker. 
+   - first transforms the *.mat and new .dat file into a NuSVM model
+   - then attempts to add LTL formulas that are based on the new .dat file
+   - finally calls NuSVM with a bound of 20
