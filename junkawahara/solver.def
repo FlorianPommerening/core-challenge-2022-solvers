@@ -1,5 +1,9 @@
 Bootstrap: docker-daemon
 From: junkawahara-solver:latest
 
+%post
+    sed -i "s|@timeout(600)  # timeout for 10 mins||g" /2022solver/zdd-solver.py
+
+
 %runscript
     /2022solver/run.sh $@
