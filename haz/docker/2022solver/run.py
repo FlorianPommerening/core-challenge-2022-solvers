@@ -2,8 +2,12 @@
 
 import sys, os, subprocess, time, tempfile
 
+CUR_DIR = os.getcwd()
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TMP_DIR = tempfile.TemporaryDirectory()
-RESULTS_DIR = TMP_DIR.name
+#RESULTS_DIR = TMP_DIR.name
+RESULTS_DIR = CUR_DIR
+print(f"Results dir: {RESULTS_DIR}")
 
 USAGE = """
 \tUsage: ./run.py [encode|decode|validate|solve|interactive]
@@ -92,31 +96,36 @@ def do_plan(format, instance = '..', sasfile = 'output.sas', planfile = 'sas_pla
         print("\nPlanning...", end='')
         t = time.time()
 
+    logfile = open(os.path.join(RESULTS_DIR, instance, 'plan.log'), "w")
+    errfile = open(os.path.join(RESULTS_DIR, instance, 'plan.err'), "w")
     if format == 'pddl':
         domfile = os.path.join(RESULTS_DIR, instance, 'domain.pddl')
         probfile = os.path.join(RESULTS_DIR, instance, 'problem.pddl')
         planfile = os.path.join(RESULTS_DIR, instance, planfile)
-        result = subprocess.run(['./plan-pddl.sh', domfile, probfile, planfile],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        result = subprocess.run([os.path.join(SCRIPT_DIR, 'plan-pddl.sh'), domfile, probfile, planfile],
+                                stdout=logfile, stderr=errfile, universal_newlines=True)
     else:
         planfile = os.path.join(RESULTS_DIR, instance, planfile)
         sasfile = os.path.join(RESULTS_DIR, instance, sasfile)
-        result = subprocess.run(['./plan-sas.sh', planfile, sasfile, cfile, dfile],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    if SILENCE:
-        if STATUS:
-            logfile = os.path.join(RESULTS_DIR, instance, 'plan.log')
-            errfile = os.path.join(RESULTS_DIR, instance, 'plan.err')
-            with open(logfile, 'w') as f:
-                f.write(result.stdout)
-            with open(errfile, 'w') as f:
-                f.write(result.stderr)
-            print(f"{time.time() - t:.2f}s")
-        else:
-            print('\n'.join(filter(lambda x: x[:2] == 'c ', result.stdout.split('\n'))))
-    else:
-        print(result.stdout)
-        print(result.stderr)
+        result = subprocess.run([os.path.join(SCRIPT_DIR, 'plan-sas.sh'), planfile, sasfile, cfile, dfile],
+                                stdout=logfile, stderr=errfile, universal_newlines=True)
+
+    logfile.close()
+    errfile.close()
+    #if SILENCE:
+    #    if STATUS:
+    #        errfile = os.path.join(RESULTS_DIR, instance, 'plan.err')
+    #        logfile = os.path.join(RESULTS_DIR, instance, 'plan.log')
+    #        with open(logfile, 'w') as f:
+    #            f.write(result.stdout)
+    #        with open(errfile, 'w') as f:
+    #            f.write(result.stderr)
+    #        print(f"{time.time() - t:.2f}s")
+    #    else:
+    #        print('\n'.join(filter(lambda x: x[:2] == 'c ', result.stdout.split('\n'))))
+    #else:
+    #    print(result.stdout)
+    #    print(result.stderr)
     return result.returncode
 
 def do_decode(mode, datafile, instance = '..', planfile = 'sas_plan', solfile = 'SOL', rescode=None):
@@ -271,7 +280,8 @@ if __name__ == "__main__":
         if sys.argv[1] == 'submission':
             STATUS = False
 
-        instance = prep_instance(sys.argv[5], wipe=(sys.argv[1] == 'submission'))
+        #instance = prep_instance(sys.argv[5], wipe=(sys.argv[1] == 'submission'))
+        instance = ""
 
         do_solve(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], instance)
 
