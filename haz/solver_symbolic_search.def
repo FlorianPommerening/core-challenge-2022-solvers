@@ -1,0 +1,5 @@
+Bootstrap: docker-daemon
+From: haz-symbolic-search:latest
+
+%runscript
+    /2022solver/run.sh $@

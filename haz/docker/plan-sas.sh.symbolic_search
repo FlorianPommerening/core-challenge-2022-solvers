@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+
+MEMORY_LIMIT=16G
+
+function run_solver {
+
+    echo "c Running for $1 seconds: $2"
+
+    # Should limit time to $1 seconds
+    eval "timeout $1 $2"
+    PLANNER1_EXIT_CODE=$?
+    if [ "$PLANNER1_EXIT_CODE" -eq "0" ]
+    then
+        echo "Instance is solvable"
+        exit 0
+    elif [ "$PLANNER1_EXIT_CODE" -eq "10" ] || [ "$PLANNER1_EXIT_CODE" -eq "11" ] || [ "$PLANNER1_EXIT_CODE" -eq "12" ]
+    then
+        echo "Instance is unsolvable"
+        exit 10
+    fi
+}
+
+run_solver 432000 "python3 /solvers/symk/fast-downward.py --overall-memory-limit ${MEMORY_LIMIT} --plan-file $1 $2 --search \"sym-fw()\""
+

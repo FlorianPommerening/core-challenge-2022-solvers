@@ -1,0 +1,56 @@
+##################
+# Stage 1: Builder
+##################
+
+FROM ubuntu:20.04 AS builder
+
+ENV TZ=Europe/Zurich
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt update && \
+    apt -y upgrade && \
+    apt install -y \
+        autoconf \
+        build-essential \
+        cmake \
+        default-jre     \
+        g++ \
+        libgmp3-dev     \
+        python3         \
+        python3-distutils \
+        unzip
+
+# build the cplex solver if available
+COPY ILOG_COS_20.10_LINUX_X86_64.bin /ILOG_COS_20.10_LINUX_X86_64.bin
+ENV CPLEX_INSTALLER=/ILOG_COS_20.10_LINUX_X86_64.bin
+ENV CPLEX_ROOT=/opt/ibm/ILOG/CPLEX_Studio201/
+RUN chmod u+x $CPLEX_INSTALLER && \
+    ./$CPLEX_INSTALLER -DLICENSE_ACCEPTED=TRUE -i silent && \
+    python3 $CPLEX_ROOT/python/setup.py install && \
+    rm -r $CPLEX_INSTALLER
+
+# build MIP solver
+COPY ./mip ./mip
+
+
+#################
+# Stage 2: Runner
+#################
+
+FROM ubuntu:20.04 AS runner
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+      python3  \
+      python3-pip \
+      time \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install cheetah3
+
+WORKDIR /solvers/mip
+COPY --from=builder /mip .
+COPY --from=builder /usr/local/lib/python3.8/dist-packages/ /usr/local/lib/python3.8/dist-packages/
+
+WORKDIR /2022solver
+COPY ./2022solver .
+COPY ./plan-sas.sh.mip plan-sas.sh
