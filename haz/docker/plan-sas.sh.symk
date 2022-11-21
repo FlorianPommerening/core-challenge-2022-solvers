@@ -38,14 +38,6 @@ function update_plan_cost {
 # SSOLUTION_LINES=$(grep -c "^a " "$SSOLUTION")
 # SSOLUTION_COST=$(( (SSOLUTION_LINES - 2) * 2 ))
 # MAXCOST=$SSOLUTION_COST
-echo "Starting with a MAXCOST: $MAXCOST"
-
-# Run gbfs-hm1
-GBFS_SOLUTION="$1.0"
-run_solver 330 "python3 /solvers/fd/fast-downward.py --overall-memory-limit ${MEMORY_LIMIT} --overall-time-limit 300s --plan-file $GBFS_SOLUTION $2 --landmarks lmg=\"lm_hm(use_orders=True, m=1)\" --evaluator \"hlm=lmcount(lmg, admissible=True, pref=false)\" --search \"eager(single(hlm),reopen_closed=False)\""
-
-update_plan_cost $GBFS_SOLUTION
-echo ""
 
 echo "Starting with a MAXCOST: $MAXCOST"
 
