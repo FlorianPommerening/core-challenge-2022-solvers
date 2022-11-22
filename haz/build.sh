@@ -12,6 +12,7 @@ cd -
 
 singularity build solver_shortest.sif solver_shortest.def
 singularity build solver_symbolic_search.sif solver_symbolic_search.def
+singularity build solver_astar_lm.sif solver_astar_lm.def
 singularity build solver_gbfs_lm.sif solver_gbfs_lm.def
 singularity build solver_mip.sif solver_mip.def
 singularity build solver_longest.sif solver_longest.def
