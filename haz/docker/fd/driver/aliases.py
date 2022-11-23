@@ -150,6 +150,22 @@ ALIASES["scorpion"] = [
         saturator=perimstar, max_time=1000, interval=10K, orders=greedy_orders()),
         pruning=limited_pruning(pruning=atom_centric_stubborn_sets(), min_required_pruning_ratio=0.2))"""]
 
+ALIASES["core-lama"] = [
+    "--landmarks", "corelmg=lm_hm(use_orders=false,m=1)", 
+    "--evaluator", "corehlm=lmcount(corelmg,admissible=true,pref=false)",
+    "--evaluator",
+    "hlm=lmcount(lm_reasonable_orders_hps(lm_rhw()),pref=false)",
+    "--evaluator", "hff=ff()",
+    "--search", """iterated([
+                        eager(single(corehlm),reopen_closed=False),
+                        lazy_greedy([hff,hlm],preferred=[hff,hlm]),
+                        lazy_wastar([hff,hlm],preferred=[hff,hlm],w=5),
+                        lazy_wastar([hff,hlm],preferred=[hff,hlm],w=3),
+                        lazy_wastar([hff,hlm],preferred=[hff,hlm],w=2),
+                        lazy_wastar([hff,hlm],preferred=[hff,hlm],w=1)
+                        ],repeat_last=true,continue_on_fail=true)""",
+]
+
 
 PORTFOLIOS = {}
 for portfolio in os.listdir(PORTFOLIO_DIR):

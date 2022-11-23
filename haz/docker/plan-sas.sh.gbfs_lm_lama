@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+python3 /solvers/fd/fast-downward.py --alias core-lama --plan-file $1 $2
+
