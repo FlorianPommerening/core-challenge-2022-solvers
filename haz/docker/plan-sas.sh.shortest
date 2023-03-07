@@ -5,7 +5,7 @@ MEMORY_LIMIT=60G # previously 16G
 
 # Time ratio of our original sequential portfolio 
 # ( X / Y * TIME_LIMIT), where X is the seconds we ran the component and Y is the total time of the original portfolio
-TIME_LIMIT_FAST_UNSOL=$(python3 -c "print(10.0 / 62610 * $TIME_LIMIT)")
+TIME_LIMIT_FAST_UNSOL=$(python3 -c "print(10 / 62610 * $TIME_LIMIT)")
 TIME_LIMIT_SYMBOLIC_SEARCH=$(python3 -c "print(4200 / 62610 * $TIME_LIMIT)")
 TIME_LIMIT_ASTAR=$(python3 -c "print(4200 / 62610 * $TIME_LIMIT)")
 TIME_LIMIT_GREEDY=$(python3 -c "print(4200 / 62610 * $TIME_LIMIT)")
