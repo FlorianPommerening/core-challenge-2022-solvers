@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-MEMORY_LIMIT=16G
+MEMORY_LIMIT=60G # previously 16G
 MAXCOST=0
 
 function run_solver {
